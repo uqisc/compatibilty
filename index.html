@@ -173,6 +173,40 @@
     line-height: 1.15;
   }
 
+  .tablemates {
+    margin: 18px auto 0;
+    padding-top: 16px;
+    max-width: 320px;
+    border-top: 1px solid #F0DCDF;
+  }
+
+  .tablemates-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+    margin: 0 0 10px;
+  }
+
+  .tablemates-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .tablemate-chip {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: #FDF0F1;
+    border: 1px solid #F3DDE0;
+    border-radius: 999px;
+    padding: 6px 14px;
+    line-height: 1.3;
+  }
+
   .celebrate {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
@@ -606,6 +640,41 @@
 
 
   // ============================================================
+  // FIND TABLEMATES
+  // ============================================================
+
+  function getTablemates(guest) {
+
+    return guestList.filter(
+      other =>
+        other.table === guest.table &&
+        other !== guest
+    );
+
+  }
+
+
+  // ============================================================
+  // ESCAPE HTML (guards against odd characters in sheet data)
+  // ============================================================
+
+  function escapeHtml(str) {
+
+    return (str || "").replace(
+      /[&<>"']/g,
+      ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch])
+    );
+
+  }
+
+
+  // ============================================================
   // DISPLAY RESULTS
   // ============================================================
 
@@ -637,6 +706,41 @@
         matches.length > 1;
 
 
+      // Other guests seated at the same table
+
+      const tablemates =
+        getTablemates(g);
+
+
+      const tablemateNames =
+        tablemates.map(t =>
+          t.last
+            ? `${t.first} ${t.last}`
+            : t.first
+        );
+
+
+      const tablematesHtml =
+        tablemateNames.length === 0
+          ? ""
+          : `
+            <div class="tablemates">
+              <p class="tablemates-label">
+                Also at your table
+              </p>
+              <div class="tablemates-list">
+                ${
+                  tablemateNames
+                    .map(name =>
+                      `<span class="tablemate-chip">${escapeHtml(name)}</span>`
+                    )
+                    .join("")
+                }
+              </div>
+            </div>
+          `;
+
+
       item.innerHTML = `
 
         <p class="prefix">
@@ -650,6 +754,8 @@
         <p class="table-line">
           Table ${g.table}
         </p>
+
+        ${tablematesHtml}
 
       `;
 
