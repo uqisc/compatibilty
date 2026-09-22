@@ -173,6 +173,25 @@
     line-height: 1.15;
   }
 
+  .dietary-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: #FDF0F1;
+    border: 1px solid #F3DDE0;
+    color: #8C5A63;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+
+  .dietary-tag svg {
+    flex-shrink: 0;
+  }
+
   .tablemates {
     margin: 18px auto 0;
     padding-top: 16px;
@@ -550,7 +569,11 @@
             (row[1] || "").trim(),
 
           table:
-            (row[2] || "").trim()
+            (row[2] || "").trim(),
+
+          // Optional 4th column in the sheet
+          dietary:
+            (row[3] || "").trim()
 
         }));
 
@@ -706,6 +729,34 @@
         matches.length > 1;
 
 
+      // Dietary requirement (only shown when it's meaningful)
+
+      const dietary =
+        (g.dietary || "").trim();
+
+      const dietaryHide =
+        ["", "none", "no", "n/a", "na", "nil", "-", "standard"];
+
+      const showDietary =
+        dietary &&
+        !dietaryHide.includes(
+          dietary.toLowerCase()
+        );
+
+      const dietaryHtml =
+        !showDietary
+          ? ""
+          : `
+            <span class="dietary-tag">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 1 7-1 13-1 3-3 4-6 5s-4 2-6 2" />
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 11 13.2 11 11" />
+              </svg>
+              ${escapeHtml(dietary)}
+            </span>
+          `;
+
+
       // Other guests seated at the same table
 
       const tablemates =
@@ -754,6 +805,8 @@
         <p class="table-line">
           Table ${g.table}
         </p>
+
+        ${dietaryHtml}
 
         ${tablematesHtml}
 
