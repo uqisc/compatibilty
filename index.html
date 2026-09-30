@@ -55,23 +55,16 @@
   /* --- Floor map --- */
   .map-block { margin:4px auto 22px; max-width:340px; }
   .map-title { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:#8C5A63; margin:0 0 8px; }
-  .map-wrap { background:#fff; border:1px solid #F0DCDF; border-radius:14px; padding:6px; }
-  .floor-map { display:block; width:100%; height:auto; aspect-ratio:230/450; max-height:70vh; margin:0 auto; touch-action:manipulation; }
-  .floor-map .tbl circle { fill:#FDF0F1; stroke:#E6BFC5; stroke-width:1; }
-  .floor-map .tbl text { font-family:'Inter',sans-serif; font-size:7.5px; fill:#8C5A63; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
-  .floor-map .tbl { cursor:pointer; }
-  .floor-map .tbl.picked circle { fill:#F8CFCF; stroke:var(--pink-mid); stroke-width:1.5; }
-  .floor-map .tbl.mine circle { fill:var(--rose); stroke:#922B21; stroke-width:1.2; }
+  .map-wrap { background:#fff; border:1px solid #F3E4E6; border-radius:14px; padding:10px 6px; }
+  .floor-map { display:block; width:100%; height:auto; aspect-ratio:218/442; max-height:75vh; margin:0 auto; }
+  .floor-map .tbl circle { fill:#FBEFF0; stroke:none; }
+  .floor-map .tbl text { font-family:'Inter',sans-serif; font-size:7.5px; fill:#C4A2A8; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+    .floor-map .tbl.mine circle { fill:var(--rose); }
   .floor-map .tbl.mine text { fill:#fff; font-weight:500; font-size:8.5px; }
   .floor-map .ring { fill:none; stroke:var(--rose); stroke-width:1.4; transform-box:fill-box; transform-origin:center; animation:ring 1.8s ease-out infinite; }
   @keyframes ring { 0% { transform:scale(1); opacity:.9; } 100% { transform:scale(2.4); opacity:0; } }
   .floor-map .lbl { font-family:'Inter',sans-serif; font-size:6.5px; letter-spacing:.12em; fill:var(--muted); text-anchor:middle; text-transform:uppercase; }
   .floor-map .stage-lbl { fill:#8C5A63; font-size:8px; letter-spacing:.2em; }
-  .map-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; min-height:34px; }
-  .map-caption { font-size:12.5px; color:var(--muted); text-align:left; }
-  .map-btn { flex:0 0 auto; height:34px; padding:0 14px; border-radius:17px; border:1px solid var(--rose); background:#fff; color:var(--rose);
-    font-family:'Inter',sans-serif; font-size:12.5px; font-weight:500; cursor:pointer; touch-action:manipulation; }
-  .map-btn:active { background:#FDF0F1; }
 
   /* --- Invitation cover --- */
   .invite-card { cursor:pointer; padding:clamp(2.75rem,10vw,3.5rem) clamp(1.5rem,6vw,2rem); transition:opacity .45s ease, transform .45s ease; }
@@ -165,7 +158,7 @@
   // FLOOR MAP: table number, x, y (from the ballroom floor plan)
   // ============================================================
   const TABLES = [[1,870.9,223.7],[2,870.9,251.5],[3,870.9,279.4],[4,870.9,307.1],[5,870.9,334.9],[6,870.9,529.9],[7,870.9,557.7],[8,870.9,585.6],[9,870.9,613.2],[10,846.8,599.4],[11,846.8,571.5],[12,846.8,543.7],[13,846.8,321.1],[14,846.8,293.2],[15,846.8,265.4],[16,846.8,237.5],[17,846.8,209.7],[18,822.4,223.7],[19,822.4,251.5],[20,822.4,279.4],[21,822.4,307.1],[22,822.4,334.9],[23,822.4,529.9],[24,822.4,557.7],[25,822.4,585.6],[26,798.3,599.4],[27,798.3,571.5],[28,798.3,543.7],[29,798.3,515.8],[30,798.3,348.9],[31,798.3,321.1],[32,798.3,293.2],[33,798.3,265.4],[34,798.3,237.5],[35,798.3,209.7],[36,774.1,223.7],[37,774.1,251.5],[38,774.1,279.4],[39,774.1,307.1],[40,774.1,334.9],[41,774.1,362.8],[42,774.1,390.6],[43,774.1,418.5],[44,774.1,446.3],[45,774.1,474.2],[46,774.1,502.0],[47,774.1,529.9],[48,774.1,557.7],[49,774.1,585.6],[50,774.1,613.2],[51,749.8,599.4],[52,749.8,571.5],[53,749.8,543.7],[54,749.8,515.8],[55,749.8,488.0],[56,749.8,460.1],[57,749.8,432.5],[58,749.8,404.6],[59,749.8,376.8],[60,749.8,348.9],[61,749.8,321.1],[62,749.8,293.2],[63,749.8,265.4],[64,749.8,237.5],[65,749.8,209.7],[66,725.7,223.7],[67,725.7,251.5],[68,725.7,279.4],[69,725.7,307.1],[70,725.7,334.9],[71,725.7,362.8],[72,725.7,390.6],[73,725.7,418.5],[74,725.7,446.3],[75,725.7,474.2],[76,725.7,502.0],[77,725.7,529.9],[78,725.7,557.7],[79,725.7,585.6],[80,725.7,613.2],[81,701.5,599.4],[82,701.5,571.5],[83,701.5,543.7],[84,701.5,515.8],[85,701.5,488.0],[86,701.5,460.1],[87,701.5,432.5],[88,701.5,404.6],[89,701.5,376.8],[90,701.5,348.9],[91,701.5,321.1],[92,701.5,293.2],[93,701.5,265.4],[94,701.5,237.5],[95,701.5,209.7]];
-  const MAP_VB = { x: 676, y: 190, w: 230, h: 450 };
+  const MAP_VB = { x: 676, y: 190, w: 218, h: 442 };
   const SVGNS = "http://www.w3.org/2000/svg";
 
   function buildMap(mineNums) {
@@ -177,11 +170,9 @@
     svg.setAttribute("aria-label", "Floor map of the ballroom. Your table is highlighted.");
 
     let h = `
-      <rect x="678" y="192" width="226" height="446" rx="6" fill="#FFFBF8" stroke="#F0DCDF"/>
-      <rect x="809" y="352" width="76" height="160" rx="4" fill="#EBD5D8" stroke="#D9B4BA"/>
+      <rect x="809" y="352" width="76" height="160" rx="4" fill="#F3E1E3"/>
       <text class="lbl stage-lbl" transform="translate(850 432) rotate(90)">Stage</text>
-      <text class="lbl" transform="translate(686 415) rotate(-90)">Main entrance</text>
-      <text class="lbl" x="790" y="632">Performance entry</text>`;
+      <text class="lbl" transform="translate(686 415) rotate(-90)">Main entrance</text>`;
 
     TABLES.forEach(([n, x, y]) => {
       const isMine = mine.has(n);
@@ -193,57 +184,11 @@
     return svg;
   }
 
-  // Zoom window (same aspect ratio as the full map) around the highlighted tables
-  function zoomBox(nums) {
-    const pts = TABLES.filter(t => nums.includes(t[0]));
-    if (!pts.length) return MAP_VB;
-    const xs = pts.map(p => p[1]), ys = pts.map(p => p[2]);
-    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
-    const ratio = MAP_VB.h / MAP_VB.w;
-    const w = Math.min(MAP_VB.w, Math.max(110, (maxX - minX) + 60, ((maxY - minY) + 60) / ratio));
-    const h = w * ratio;
-    const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
-    const x = Math.min(Math.max(cx - w / 2, MAP_VB.x), MAP_VB.x + MAP_VB.w - w);
-    const y = Math.min(Math.max(cy - h / 2, MAP_VB.y), MAP_VB.y + MAP_VB.h - h);
-    return { x, y, w, h };
-  }
-
   function createMapBlock(nums) {
     const block = document.createElement("div");
     block.className = "map-block";
-    const label = nums.length > 1 ? "Your tables on the floor" : "Your table on the floor";
-    block.innerHTML = `<p class="map-title">${label}</p><div class="map-wrap"></div>
-      <div class="map-foot"><span class="map-caption">Tap any table to see its number</span>
-      <button class="map-btn" type="button">Zoom in</button></div>`;
-
-    const wrap = block.querySelector(".map-wrap");
-    const svg = buildMap(nums);
-    wrap.appendChild(svg);
-
-    const caption = block.querySelector(".map-caption");
-    const btn = block.querySelector(".map-btn");
-    let zoomed = false;
-
-    function setView(v) { svg.setAttribute("viewBox", `${v.x} ${v.y} ${v.w} ${v.h}`); }
-
-    btn.addEventListener("click", () => {
-      zoomed = !zoomed;
-      setView(zoomed ? zoomBox(nums) : MAP_VB);
-      btn.textContent = zoomed ? "Show full room" : "Zoom in";
-    });
-
-    svg.addEventListener("click", e => {
-      const g = e.target.closest(".tbl");
-      if (!g) return;
-      svg.querySelectorAll(".tbl.picked").forEach(el => el.classList.remove("picked"));
-      const n = Number(g.dataset.n);
-      if (nums.includes(n)) { caption.textContent = `Table ${n} — that's yours 🌸`; return; }
-      g.classList.add("picked");
-      caption.textContent = `Table ${n}`;
-    });
-
-    // Start zoomed in when a single table matches, since 95 tables are small on a phone
-    if (nums.length) { zoomed = true; setView(zoomBox(nums)); btn.textContent = "Show full room"; }
+    block.innerHTML = `<p class="map-title">${nums.length > 1 ? "Your tables" : "Your table"}</p><div class="map-wrap"></div>`;
+    block.querySelector(".map-wrap").appendChild(buildMap(nums));
     return block;
   }
 
